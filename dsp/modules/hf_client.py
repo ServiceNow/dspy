@@ -23,14 +23,20 @@ def backoff_hdlr(details):
     )
 
 class HFClientTGI(HFModel):
-    def __init__(self, model, port, url="http://future-hgx-1", http_request_kwargs=None, **kwargs):
+    def __init__(self, model, port, url="http://future-hgx-1", token=None, http_request_kwargs=None, **kwargs):
         super().__init__(model=model, is_client=True)
 
         self.url = url
         self.ports = port if isinstance(port, list) else [port]
         self.http_request_kwargs = http_request_kwargs or {}
 
-        self.headers = {"Content-Type": "application/json"}
+        self.headers = {
+            "Accept" : "application/json",
+            "Content-Type": "application/json"
+        }
+
+        if token:
+            self.headers["Authorization"] = f"Bearer {token}"
 
         self.kwargs = {
             "model": model,
